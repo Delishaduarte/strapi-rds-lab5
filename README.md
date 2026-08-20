@@ -1,61 +1,139 @@
-# 🚀 Getting started with Strapi
+# Strapi Application with AWS RDS PostgreSQL
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+## 1. Project Overview
 
-### `develop`
+This project demonstrates the deployment of a Strapi application on an Amazon EC2 instance and its connection to an Amazon RDS PostgreSQL database.
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+The application provides content management functionality through Strapi and stores its data in PostgreSQL hosted on Amazon RDS.
 
-```
-npm run develop
-# or
-yarn develop
-```
+## 2. AWS Architecture
 
-### `start`
+The application uses the following architecture:
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
+EC2 Instance
+    |
+    | Strapi Application
+    |
+    v
+Amazon RDS PostgreSQL
+    |
+    +-- articles
+    +-- authors
 
-```
+The EC2 instance hosts the Strapi application, while Amazon RDS provides the managed PostgreSQL database.
+
+## 3. Technologies Used
+
+- Amazon EC2
+- Amazon RDS PostgreSQL
+- Strapi
+- Node.js
+- PostgreSQL
+- Git and GitHub
+
+## 4. RDS Database Configuration
+
+Database engine: PostgreSQL
+
+Database name: strapi_db
+
+Database port: 5432
+
+RDS endpoint:
+
+strapi-rds-lab5.cxum6uisg7jh.ap-south-1.rds.amazonaws.com
+
+The database credentials are stored securely in the EC2 environment configuration and are not included in this repository.
+
+## 5. Strapi Database Connection
+
+The Strapi application is configured using environment variables:
+
+DATABASE_CLIENT=postgres
+
+DATABASE_HOST=<RDS_ENDPOINT>
+
+DATABASE_PORT=5432
+
+DATABASE_NAME=strapi_db
+
+DATABASE_USERNAME=postgres
+
+DATABASE_PASSWORD=<RDS_PASSWORD>
+
+DATABASE_SSL=true
+
+Sensitive values such as the database password are stored in the `.env` file and are excluded from GitHub using `.gitignore`.
+
+## 6. Security Configuration
+
+The RDS PostgreSQL security group allows inbound traffic on port 5432 only from the EC2 security group.
+
+No public database access using 0.0.0.0/0 is configured.
+
+This prevents direct public access to the PostgreSQL database.
+
+## 7. Running the Application
+
+Navigate to the Strapi project:
+
+cd /var/www/strapi-app
+
+Start Strapi:
+
 npm run start
-# or
-yarn start
-```
 
-### `build`
+The Strapi administration panel is available at:
 
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
+http://<EC2_PUBLIC_IP>:1337/admin
 
-```
-npm run build
-# or
-yarn build
-```
+## 8. CRUD Operations
 
-## ⚙️ Deployment
+The application demonstrates all required CRUD operations.
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+### Create
 
-```
-yarn strapi deploy
-```
+A new Article can be created through the Strapi Content Manager.
 
-## 📚 Learn more
+### Read
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+Existing Articles can be viewed through the Strapi Content Manager.
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+### Update
 
-## ✨ Community
+An Article can be edited and the updated data is stored in the RDS PostgreSQL database.
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+### Delete
 
----
+An Article can be deleted from Strapi and the corresponding database record is removed.
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## 9. Database Tables
+
+The Strapi PostgreSQL database contains multiple tables including:
+
+- articles
+- authors
+- categories
+- admin_users
+
+The Articles and Authors content types demonstrate relationships between application entities.
+
+## 10. Database Verification
+
+Database records can be verified using PostgreSQL from the EC2 instance.
+
+Example:
+
+SELECT id, title, description, published_at FROM articles;
+
+## 11. Security of Credentials
+
+Passwords, database credentials, API tokens and other secrets are not committed to GitHub.
+
+The `.env` file is excluded through `.gitignore`.
+
+## 12. Repository
+
+GitHub Repository:
+
+https://github.com/Delishaduarte/strapi-rds-lab5
